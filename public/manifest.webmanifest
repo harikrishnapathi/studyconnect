@@ -1,0 +1,25 @@
+{
+  "short_name": "StudyConnect",
+  "name": "StudyConnect: Global AI Peer Learning & Mentorship App",
+  "description": "Collaborative Study Pods, Peer Mentorship, Real-time WebSockets, Whiteboard & Server-Side Gemini AI.",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#090d16",
+  "theme_color": "#4f46e5",
+  "display": "standalone",
+  "orientation": "portrait",
+  "categories": ["education", "productivity", "social"]
+}

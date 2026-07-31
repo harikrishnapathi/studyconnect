@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.25-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend_api
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    restart: always
+
+  backend_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    deploy:
+      replicas: 4
+    environment:
+      - DJANGO_SETTINGS_MODULE=studyconnect.settings.production
+      - DATABASE_URL=postgres://studyconnect_admin:${DB_PASSWORD}@db_primary:5432/studyconnect_prod
+      - READ_REPLICA_URL=postgres://studyconnect_replica:${DB_PASSWORD}@db_replica:5432/studyconnect_prod
+      - REDIS_URL=redis://:redis_auth_pass@redis_cluster:6379/0
+      - CELERY_BROKER_URL=redis://:redis_auth_pass@redis_cluster:6379/1
+    depends_on:
+      - db_primary
+      - redis_cluster
+
+  celery_workers:
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    deploy:
+      replicas: 8
+    environment:
+      - DJANGO_SETTINGS_MODULE=studyconnect.settings.production
+      - DATABASE_URL=postgres://studyconnect_admin:${DB_PASSWORD}@db_primary:5432/studyconnect_prod
+      - REDIS_URL=redis://:redis_auth_pass@redis_cluster:6379/0
+      - CELERY_BROKER_URL=redis://:redis_auth_pass@redis_cluster:6379/1
+    depends_on:
+      - redis_cluster
+
+  db_primary:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=studyconnect_prod
+      - POSTGRES_USER=studyconnect_admin
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_prod_primary_data:/var/lib/postgresql/data
+
+  db_replica:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=studyconnect_prod
+      - POSTGRES_USER=studyconnect_replica
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_prod_replica_data:/var/lib/postgresql/data
+
+  redis_cluster:
+    image: redis:7-alpine
+    command: redis-server --requirepass redis_auth_pass --maxmemory 4gb --maxmemory-policy allkeys-lru
+    restart: always
+
+volumes:
+  postgres_prod_primary_data:
+  postgres_prod_replica_data:

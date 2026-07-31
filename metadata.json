@@ -1,0 +1,6 @@
+{
+  "name": "StudyConnect",
+  "description": "The world's social learning network. Instantly match with study partners, chat, share files, join video calls, and collaborate on an interactive whiteboard.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

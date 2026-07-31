@@ -1,0 +1,24 @@
+# Dockerfile for Celery Worker & Scheduled Beat Runner
+FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /app
+
+RUN useradd -m -u 1000 celeryuser && chown -R celeryuser:celeryuser /app
+USER celeryuser
+
+# Default command runs Celery worker with concurrency scaling
+CMD ["celery", "-A", "studyconnect", "worker", "-l", "info", "--concurrency=8", "-Q", "default,ai_tasks,emails,reports"]

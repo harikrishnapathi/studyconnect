@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: studyconnect-backend-deployment
+  namespace: production
+  labels:
+    app: studyconnect-backend
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: studyconnect-backend
+  template:
+    metadata:
+      labels:
+        app: studyconnect-backend
+    spec:
+      containers:
+      - name: django-api
+        image: ghcr.io/studyconnect/platform-backend:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - secretRef:
+            name: studyconnect-prod-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /api/v1/health/
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health/
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: studyconnect-backend-service
+  namespace: production
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: studyconnect-backend
