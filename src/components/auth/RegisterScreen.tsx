@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useApp } from '../../context/AppContext';
 import { 
   User, 
   AtSign, 
@@ -21,6 +22,7 @@ interface RegisterScreenProps {
 }
 
 export const RegisterScreen: React.FC<RegisterScreenProps> = ({ onSuccess, onLoginClick }) => {
+  const { setUser } = useApp();
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -120,6 +122,16 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({ onSuccess, onLog
         setLoading(false);
         return;
       }
+
+      setUser(prev => ({
+        ...prev,
+        id: data.userId || prev.id,
+        name: fullName,
+        username: username,
+        email: email.toLowerCase(),
+        country: country || prev.country,
+        language: preferredLanguage || prev.language
+      }));
 
       onSuccess(data.email, data.userId, data.otpDemo);
     } catch (err: any) {

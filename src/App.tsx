@@ -36,6 +36,7 @@ import { ProductionReadinessView } from './components/launch/ProductionReadiness
 const MainLayout: React.FC = () => {
   const { 
     user,
+    setUser,
     authScreen, 
     setAuthScreen, 
     isLoggedIn, 
@@ -58,7 +59,7 @@ const MainLayout: React.FC = () => {
         onComplete={() => {
           if (isLoggedIn) {
             if (hasCompletedOnboarding) {
-              setAuthScreen('welcome');
+              setAuthScreen('home');
             } else {
               setAuthScreen('onboarding');
             }
@@ -88,7 +89,7 @@ const MainLayout: React.FC = () => {
     if (authScreen === 'verify-email') {
       return (
         <EmailVerificationScreen 
-          email={registeredEmail || 'alex.chen@university.edu'}
+          email={registeredEmail || user.email || 'alex.chen@university.edu'}
           otpDemo={otpDemo}
           onVerified={() => {
             setIsLoggedIn(true);
@@ -104,8 +105,20 @@ const MainLayout: React.FC = () => {
           onSuccess={(userData, tokens, isOnboarded) => {
             setIsLoggedIn(true);
             setAuthTokens(tokens);
+            if (userData) {
+              setUser(prev => ({
+                ...prev,
+                id: userData.id || prev.id,
+                name: userData.fullName || userData.username || prev.name,
+                username: userData.username || prev.username,
+                email: userData.email || prev.email,
+                country: userData.country || prev.country,
+                language: userData.preferredLanguage || prev.language
+              }));
+            }
             if (isOnboarded) {
               setHasCompletedOnboarding(true);
+              setAuthScreen('home');
             } else {
               setAuthScreen('onboarding');
             }
@@ -137,8 +150,12 @@ const MainLayout: React.FC = () => {
   if (!hasCompletedOnboarding || authScreen === 'onboarding') {
     return (
       <IntelligentOnboarding 
-        onComplete={() => {
+        onComplete={(updatedProfile) => {
+          if (updatedProfile) {
+            setUser(updatedProfile);
+          }
           setHasCompletedOnboarding(true);
+          setAuthScreen('home');
         }}
       />
     );

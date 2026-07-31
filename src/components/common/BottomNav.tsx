@@ -13,7 +13,8 @@ import {
   Trophy,
   Crown,
   Server,
-  Rocket
+  Rocket,
+  Settings
 } from 'lucide-react';
 
 export const BottomNav: React.FC = () => {
@@ -37,12 +38,12 @@ export const BottomNav: React.FC = () => {
       </div>
 
       {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-xl px-2 py-1.5 flex items-center justify-around xl:hidden overflow-x-auto">
+      <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-xl px-2 py-1.5 flex items-center justify-start sm:justify-around xl:hidden overflow-x-auto scrollbar-none gap-0.5 sm:gap-1">
         
         {/* 1. Home */}
         <button
           onClick={() => setActiveTab('home')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'home' ? 'text-indigo-400 font-bold' : 'text-slate-400'
           }`}
         >
@@ -53,7 +54,7 @@ export const BottomNav: React.FC = () => {
         {/* 2. Match */}
         <button
           onClick={() => setActiveTab('matching')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'matching' ? 'text-indigo-400 font-bold' : 'text-slate-400'
           }`}
         >
@@ -64,7 +65,7 @@ export const BottomNav: React.FC = () => {
         {/* AI Ecosystem */}
         <button
           onClick={() => setActiveTab('ai-ecosystem')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'ai-ecosystem' ? 'text-indigo-400 font-bold' : 'text-indigo-400/80'
           }`}
         >
@@ -75,7 +76,7 @@ export const BottomNav: React.FC = () => {
         {/* Growth Engine */}
         <button
           onClick={() => setActiveTab('growth-engine')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'growth-engine' ? 'text-emerald-400 font-bold' : 'text-emerald-400/80'
           }`}
         >
@@ -86,7 +87,7 @@ export const BottomNav: React.FC = () => {
         {/* Business Platform */}
         <button
           onClick={() => setActiveTab('business-platform')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'business-platform' ? 'text-amber-400 font-bold' : 'text-amber-400/80'
           }`}
         >
@@ -97,7 +98,7 @@ export const BottomNav: React.FC = () => {
         {/* Production Infrastructure */}
         <button
           onClick={() => setActiveTab('infrastructure')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'infrastructure' ? 'text-indigo-400 font-bold' : 'text-indigo-400/80'
           }`}
         >
@@ -108,7 +109,7 @@ export const BottomNav: React.FC = () => {
         {/* Launch & QA */}
         <button
           onClick={() => setActiveTab('production-readiness')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'production-readiness' ? 'text-emerald-400 font-bold' : 'text-emerald-400/80'
           }`}
         >
@@ -119,7 +120,7 @@ export const BottomNav: React.FC = () => {
         {/* 3. Pods */}
         <button
           onClick={() => setActiveTab('pods')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'pods' ? 'text-indigo-400 font-bold' : 'text-slate-400'
           }`}
         >
@@ -130,7 +131,7 @@ export const BottomNav: React.FC = () => {
         {/* 4. Communities */}
         <button
           onClick={() => setActiveTab('communities')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'communities' ? 'text-indigo-400 font-bold' : 'text-slate-400'
           }`}
         >
@@ -141,7 +142,7 @@ export const BottomNav: React.FC = () => {
         {/* 5. Circle */}
         <button
           onClick={() => setActiveTab('circle')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'circle' ? 'text-indigo-400 font-bold' : 'text-slate-400'
           }`}
         >
@@ -149,15 +150,26 @@ export const BottomNav: React.FC = () => {
           <span className="text-[9px]">Circle</span>
         </button>
 
-        {/* 6. Feed */}
+        {/* Feed */}
         <button
           onClick={() => setActiveTab('feed')}
-          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all ${
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
             activeTab === 'feed' ? 'text-indigo-400 font-bold' : 'text-slate-400'
           }`}
         >
           <Activity className="w-4 h-4" />
           <span className="text-[9px]">Feed</span>
+        </button>
+
+        {/* Settings */}
+        <button
+          onClick={() => setActiveTab('settings')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-xl transition-all shrink-0 ${
+            activeTab === 'settings' ? 'text-indigo-400 font-bold' : 'text-slate-400'
+          }`}
+        >
+          <Settings className="w-4 h-4" />
+          <span className="text-[9px]">Settings</span>
         </button>
 
       </nav>

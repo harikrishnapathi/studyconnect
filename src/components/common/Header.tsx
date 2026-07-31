@@ -29,7 +29,6 @@ import {
   Download
 } from 'lucide-react';
 import { SafetyModal } from '../safety/SafetyModal';
-import { InstallAppModal } from './InstallAppModal';
 import { StudyStatus } from '../../types';
 
 export const Header: React.FC = () => {
@@ -51,7 +50,6 @@ export const Header: React.FC = () => {
   } = useApp();
 
   const [showSafetyModal, setShowSafetyModal] = useState(false);
-  const [showInstallModal, setShowInstallModal] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
@@ -332,16 +330,6 @@ export const Header: React.FC = () => {
             <ShieldAlert className="w-4 h-4" />
           </button>
 
-          {/* Install PWA App Button */}
-          <button
-            onClick={() => setShowInstallModal(true)}
-            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-1.5 transition-all transform active:scale-95"
-            title="Install StudyConnect PWA App"
-          >
-            <Download className="w-3.5 h-3.5 text-white" />
-            <span className="hidden sm:inline">Install App</span>
-          </button>
-
           {/* Theme Switcher */}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'oled' : theme === 'oled' ? 'light' : 'dark')}
@@ -349,6 +337,17 @@ export const Header: React.FC = () => {
             title={`Current theme: ${theme}`}
           >
             {theme === 'light' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+          </button>
+
+          {/* Quick Settings Icon Button */}
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`p-2 rounded-xl transition-colors ${
+              activeTab === 'settings' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
+            }`}
+            title="Profile & Settings"
+          >
+            <Settings className="w-4 h-4" />
           </button>
 
           {/* Profile Menu dropdown */}
@@ -429,7 +428,6 @@ export const Header: React.FC = () => {
       </div>
 
       {showSafetyModal && <SafetyModal onClose={() => setShowSafetyModal(false)} />}
-      <InstallAppModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} />
     </header>
   );
 };

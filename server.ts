@@ -2338,6 +2338,39 @@ app.post('/api/launch/feature-flags/toggle', (req, res) => {
   res.json({ success: true, message: `Feature flag ${key} updated to ${state}`, featureFlags: featureFlagsStore });
 });
 
+// Delete Account API
+app.post('/api/account/delete', (req, res) => {
+  try {
+    const { userId, email } = req.body;
+    if (userId) {
+      userProfilesDb.delete(userId);
+    }
+    if (email) {
+      usersDb.delete(email.toLowerCase());
+      otpDb.delete(email.toLowerCase());
+    }
+    res.json({ success: true, message: 'Account and associated data deleted permanently.' });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Export Account Data API
+app.get('/api/account/export', (req, res) => {
+  try {
+    const { userId } = req.query;
+    const profile = userId ? userProfilesDb.get(String(userId)) : null;
+    res.json({
+      success: true,
+      exportTimestamp: new Date().toISOString(),
+      profile: profile || { note: 'Default local profile active' },
+      app: 'StudyConnect'
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
